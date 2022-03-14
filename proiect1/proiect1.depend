@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1646744465 source:d:\facultate\poo\proiect1\main.cpp
+	<iostream>
+	<string.h>
+
+1647023381 source:d:\facultate\poo\proiect1_gitrep\proiect1\main.cpp
+	<iostream>
+	<string.h>
+
