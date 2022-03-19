@@ -29,6 +29,7 @@ public:
     friend ostream& operator<<(ostream&, Angajat&);
     friend bool operator==(Angajat&, Angajat&);
     friend bool operator!=(Angajat&, Angajat&);
+    int operator[](int);
 
     void setNume(string nume)
     {
@@ -208,7 +209,7 @@ ostream& operator<<(ostream& out, Angajat& angajat)
         cout<<"Rating luna (un int)"<<luna<<" : "<<angajat.rating[luna]<<endl;
 
     out<<endl;
-    // return out;
+     return out;
 }
 
 bool operator==(Angajat& angajat1, Angajat& angajat2)
@@ -225,6 +226,17 @@ bool operator!=(Angajat& angajat1, Angajat& angajat2)
         return true;
 
     return false;
+}
+
+int Angajat::operator[](int i)
+{
+    if(i > nrLuni)
+    {
+        cout<<"Angajatul nu e angajat de "<<nrLuni<<" luni!";
+        return 0;
+    }
+
+    return rating[i];
 }
 
 
@@ -481,20 +493,25 @@ private:
 
 public:
     Produs() {};
+    Produs(string);
+    Produs(string, int);
     Produs(int, string, int, int, int,int);
     Produs(const Produs&);
-    Produs& operator=(Produs&);
+    Produs& operator=(Produs);
+    Produs& operator=(string);
 
     friend istream& operator>>(istream&, Produs&);
     friend ostream& operator<<(ostream&, Produs&);
     friend bool operator==(Produs&, Produs&);
     friend bool operator!=(Produs&, Produs&);
+    friend Produs operator+(int, Produs&);
     Produs operator+(int);
     Produs operator-(int);
     Produs operator+=(int);
     Produs operator-=(int);
     bool operator<(int);
     bool operator>(int);
+    operator int() const;
 
     void setCod(int cod)
     {
@@ -547,6 +564,26 @@ public:
     }
 };
 
+Produs::Produs(string nume)
+{
+    this->cod = 0;
+    this->nume = nume;
+    this->pret = 0;
+    this->ziExpirare = 0;
+    this->lunaExpirare = 0;
+    this->anExpirare = 0;
+}
+
+Produs::Produs(string nume, int pret)
+{
+    this->cod = 0;
+    this->nume = nume;
+    this->pret = pret;
+    this->ziExpirare = 0;
+    this->lunaExpirare = 0;
+    this->anExpirare = 0;
+}
+
 Produs::Produs(int cod, string nume, int pret, int ziExpirare, int lunaExpirare, int anExpirare)
 {
     this->cod = cod;
@@ -567,7 +604,7 @@ Produs::Produs(const Produs& obj)
     this->anExpirare = obj.anExpirare;
 }
 
-Produs& Produs::operator=(Produs& obj)
+Produs& Produs::operator=(Produs obj)
 {
     if(this != &obj)
     {
@@ -584,7 +621,7 @@ Produs& Produs::operator=(Produs& obj)
 
 istream& operator>>(istream& in, Produs& produs)
 {
-    cout<<"Cod produs: ";
+    cout<<"Cod produs (un int): ";
     in>>produs.cod;
 
     cout<<"Nume produs: ";
@@ -646,6 +683,19 @@ Produs Produs::operator+(int x)
     return newProd;
 }
 
+Produs operator+(int x, Produs& obj)
+{
+    Produs newProd;
+    newProd.cod = obj.cod;
+    newProd.nume = obj.nume;
+    newProd.pret = obj.pret + x;
+    newProd.ziExpirare = obj.ziExpirare;
+    newProd.lunaExpirare = obj.lunaExpirare;
+    newProd.anExpirare = obj.anExpirare;
+
+    return newProd;
+}
+
 Produs Produs::operator-(int x)
 {
     Produs newProd;
@@ -689,6 +739,12 @@ bool Produs::operator>(int x)
         return true;
     return false;
 }
+
+Produs::operator int() const
+{
+    return pret;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -943,7 +999,7 @@ void comanda11(Restaurant *restaurante, int nrRestaurante)
 
 int main()
 {
-    int nrComenzi = 11, nrRestaurante = 0, nrProduse = 0, i, j;
+    int nrComenzi = 11, nrRestaurante = 0, nrProduse = 0, i;
     Restaurant *restaurante = NULL;        //indexat de la 1
     Produs *produse = NULL;                //indexat de la 1
     string comanda, comenzi[nrComenzi + 1];
@@ -1009,8 +1065,23 @@ int main()
 
     }
 
-    cout<<endl<<"Proces incheiat!"<<endl;
+    cout<<endl<<"Proces incheiat!"<<endl<<endl;
 
+
+    cout<<"DEMO:"<<endl<<endl;
+
+    Produs p1, p2("Paine"), p3("Apa", 5);
+    cin>>p1;
+    Produs p4 = p1;
+    Produs p5 = string("Lapte");
+    cout<<p5;
+    p5 =  50 + p4 + 100;
+    cout<<p5;
+    int x = p5;
+
+    Angajat a1;
+    cin>>a1;
+    cout<<a1[5];
 
     return 0;
 }
